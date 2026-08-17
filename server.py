@@ -24,7 +24,7 @@ LOG_FILE = os.path.join(OUTPUT_DIR, "security_log.txt")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # State tracking dictionaries
-client_history = defaultdict(list)  # IP -> list of request timestamps
+client_history = defaultdict(list)    # IP -> list of request timestamps
 blocked_ips = {}                    # IP -> unblock timestamp
 
 def log_event(message):

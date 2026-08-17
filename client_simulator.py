@@ -13,12 +13,11 @@ PORT = 9000
 def send_request(message):
     """Sends a single TCP request to the server and prints the response."""
     try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect((HOST, PORT))
-        s.sendall(message.encode('utf-8'))
-        response = s.recv(1024)
-        print(f"    [Server Response] {response.decode('utf-8', errors='ignore').strip()}")
-        s.close()
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.connect((HOST, PORT))
+            s.sendall(message.encode('utf-8'))
+            response = s.recv(1024)
+            print(f"    [Server Response] {response.decode('utf-8', errors='ignore').strip()}")
     except ConnectionRefusedError:
         print("    [-] Connection refused. Make sure server.py is running!")
     except Exception as e:
@@ -36,8 +35,7 @@ def simulate_flood_attack():
     print("Sending a rapid burst of requests to trigger rate limiting...")
     for i in range(8):
         print(f"Burst request #{i+1}...")
-        send_request(f"POST /login HTTP/1.1 — attempt {i+1}")
-        # No delay — hitting as fast as possible
+        send_request(f"POST /login HTTP/1.1 attempt_{i+1}")
 
 if __name__ == "__main__":
     print("[*] Starting client simulator...")
